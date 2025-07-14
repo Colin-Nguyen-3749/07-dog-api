@@ -37,26 +37,38 @@ breedSelect.addEventListener('change', function() {
     return;
   }
 
-  // Build the URL for fetching a random image of the selected breed
-  const imageUrl = `https://dog.ceo/api/breed/${selectedBreed}/images/random`;
+  // Build the URL for fetching 9 random images of the selected breed
+  const imageUrl = `https://dog.ceo/api/breed/${selectedBreed}/images/random/9`;
 
-  // Fetch a random image for the selected breed
+  // Fetch 9 random images for the selected breed
   fetch(imageUrl)
     .then(function(response) {
       // Convert the response to JSON
       return response.json();
     })
     .then(function(data) {
-      // Get the image URL from the response
-      const dogImage = data.message;
+      // Get the array of image URLs from the response
+      const dogImages = data.message;
 
-      // Create an img element to show the dog image
-      const img = document.createElement('img');
-      img.src = dogImage;
-      img.alt = `A ${selectedBreed} dog`;
-
-      // Clear the gallery and add the new image
+      // Clear the gallery before adding new images
       gallery.innerHTML = '';
-      gallery.appendChild(img);
+
+      // Loop through each image URL and create an img element
+      dogImages.forEach(function(dogImage) {
+        // Create a div for each gallery item
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+
+        // Create an img element to show the dog image
+        const img = document.createElement('img');
+        img.src = dogImage;
+        img.alt = `A ${selectedBreed} dog`;
+
+        // Add the img to the gallery item div
+        item.appendChild(img);
+
+        // Add the gallery item to the gallery
+        gallery.appendChild(item);
+      });
     });
 });
