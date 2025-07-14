@@ -22,3 +22,41 @@ fetch('https://dog.ceo/api/breeds/list/all')
       breedSelect.appendChild(option);
     }
   });
+
+// Get the gallery div from the page
+const gallery = document.getElementById('gallery');
+
+// Listen for changes on the breed select menu
+breedSelect.addEventListener('change', function() {
+  // Get the selected breed
+  const selectedBreed = breedSelect.value;
+
+  // If no breed is selected, clear the gallery and stop
+  if (!selectedBreed) {
+    gallery.innerHTML = '';
+    return;
+  }
+
+  // Build the URL for fetching a random image of the selected breed
+  const imageUrl = `https://dog.ceo/api/breed/${selectedBreed}/images/random`;
+
+  // Fetch a random image for the selected breed
+  fetch(imageUrl)
+    .then(function(response) {
+      // Convert the response to JSON
+      return response.json();
+    })
+    .then(function(data) {
+      // Get the image URL from the response
+      const dogImage = data.message;
+
+      // Create an img element to show the dog image
+      const img = document.createElement('img');
+      img.src = dogImage;
+      img.alt = `A ${selectedBreed} dog`;
+
+      // Clear the gallery and add the new image
+      gallery.innerHTML = '';
+      gallery.appendChild(img);
+    });
+});
